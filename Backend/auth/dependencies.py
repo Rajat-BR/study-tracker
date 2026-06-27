@@ -15,7 +15,7 @@ def get_current_user(token: str=Depends(oauth2_scheme)):
             raise HTTPException(status_code=401, detail="Could not validate credentials")
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, username FROM users WHERE id = ?", (user_id,))
+        cursor.execute("SELECT id, username, email FROM users WHERE id = ?", (user_id,))
         row = cursor.fetchone()
 
         if not row:
@@ -23,7 +23,8 @@ def get_current_user(token: str=Depends(oauth2_scheme)):
         
         return UserOut(
             id=row["id"],
-            username=row["username"]
+            username=row["username"],
+            email=row["email"]
         ) 
     
     except InvalidTokenError:

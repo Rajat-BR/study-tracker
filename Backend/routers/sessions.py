@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from schemas.sessions import SessionCreate, SessionOut, SessionUpdate, SessionFilter, UserRegister, UserLogin, UserOut, Token
 from services.sessions import fetch_sessions, fetch_session_by_id, new_session, change_session, remove_session, register_user, login_user
-from exceptions.custom_exceptions import SessionNotFoundError, InvalidSortFieldError, UserAlreadyExistsError, InvalidCredentialsError
+from exceptions.custom_exceptions import SessionNotFoundError, InvalidSortFieldError, UserAlreadyExistsError, InvalidCredentialsError, EmailAlreadyExistsError
 from auth.dependencies import get_current_user
 
 
@@ -63,6 +63,8 @@ def register(user: UserRegister):
         return register_user(user)
     except UserAlreadyExistsError:
         raise HTTPException(status_code=409, detail="Username Already Exists")
+    except EmailAlreadyExistsError:
+        raise HTTPException(status_code=409, detail="Email Already Exists")
     
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends()):

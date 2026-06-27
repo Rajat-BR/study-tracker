@@ -1,7 +1,7 @@
 from fastapi import Depends
 from database.connection import get_connection
 from schemas.sessions import SessionCreate, SessionUpdate, UserLogin, UserRegister, UserOut, Token
-from exceptions.custom_exceptions import SessionNotFoundError, InvalidSortFieldError, UserAlreadyExistsError, InvalidCredentialsError
+from exceptions.custom_exceptions import SessionNotFoundError, InvalidSortFieldError, UserAlreadyExistsError, InvalidCredentialsError, EmailAlreadyExistsError
 from auth.security import hash_password, verify_password, create_access_token, oauth2_scheme, decode_access_token
 
 def fetch_sessions(user_id, filters, search, sort_by, order, page, limit):
@@ -159,6 +159,12 @@ def register_user(user: UserRegister):
         cursor = conn.cursor()
         
         # Check if the user exists
+        cursor.execute("SELECT id FROM users WHERE email = ?", (user.email,))
+        row = cursor.fetchone()
+        if row:
+            raise EmailAlreadyExistsError("Email already Exists")
+        
+
         cursor.execute("SELECT id FROM users WHERE username = ?", (user.username,)) #Only care whether the username exists or not. Why select everything ?
         row = cursor.fetchone()
 
@@ -168,7 +174,7 @@ def register_user(user: UserRegister):
         # Else
         hashed_password = hash_password(user.password)
 
-        cursor.execute("INSERT INTO users(username,hashed_password) VALUES (?, ?)", (user.username, hashed_password))
+        cursor.execute("INSERT INTO users(username,email,hashed_password) VALUES (?, ?, ?)", (user.username, user.email, hashed_password))
 
         conn.commit()
 
@@ -176,7 +182,8 @@ def register_user(user: UserRegister):
         
         return UserOut(
             id=user_id,
-            username=user.username
+            username=user.username,
+            email=user.email
         )
 
     finally:
@@ -190,7 +197,9 @@ def login_user(form_data):
         cursor = conn.cursor()
 
         # Check if the user exists
-        cursor.execute("SELECT id, hashed_password FROM users WHERE username = ?", (form_data.username,))
+        # OAuth2PasswordRequestForm uses 'username' by specification.
+        # In this application, it contains the user's email.
+        cursor.execute("SELECT id, hashed_password FROM users WHERE email = ?", (form_data.username,))
         rows = cursor.fetchone()
 
         if not rows:
