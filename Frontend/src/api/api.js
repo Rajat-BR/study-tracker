@@ -33,15 +33,21 @@ export async function registerUser(username, email, password) {
 // FastAPI Endpoint:
 // POST /login
 export async function loginUser(email, password) {
-  // const response = await fetch(`${BASE_URL}/login`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({ email, password }),
-  // });
-  // return response.json(); // will likely include a token once you add auth
+  const params = new URLSearchParams();
 
-  console.log("[mock] loginUser:", { email, password });
-  return Promise.resolve({ success: true, user: mockUser });
+  params.set("username", email);
+  params.set("password", password);
+
+  const response = await fetch(`${BASE_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
+  });
+
+  const data = await response.json()
+
+  localStorage.setItem("token", data.access_token)
+
 }
 
 // FastAPI Endpoint:
@@ -49,21 +55,31 @@ export async function loginUser(email, password) {
 // (Not called anywhere yet - useful later once you add real login
 // sessions/tokens and want to check "who is currently logged in".)
 export async function getCurrentUser() {
-  const response = await fetch(`${BASE_URL}/me`, {
+  const token = localStorage.getItem("token")
+
+  const response = await fetch(`${BASE_URL}/sessions`, {
+    method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.json();
 
-  return Promise.resolve(mockUser);
 }
 
 // FastAPI Endpoint:
 // GET /sessions
 export async function getSessions() {
-  const response = await fetch(`${BASE_URL}/sessions`);
-  return response.json();
 
-  return Promise.resolve(mockSessions);
+  const token = localStorage.getItem("token")
+
+  const response = await fetch(`${BASE_URL}/sessions`,{
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  const data = await response.json();
+  return data;
+
 }
 
 // FastAPI Endpoint:
