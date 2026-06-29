@@ -13,6 +13,10 @@ router = APIRouter()
 def home():
     return {"message": "API running"}
 
+@router.get("/me", response_model=UserOut)
+def me(current_user: UserOut = Depends(get_current_user)):
+    return current_user
+
 @router.get("/sessions", response_model=list[SessionOut])
 def get_sessions(current_user: UserOut = Depends(get_current_user),
                  filters: SessionFilter = Depends(),
