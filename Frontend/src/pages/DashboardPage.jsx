@@ -74,75 +74,119 @@ function DashboardPage({
   };
 
   return (
-    <div className="page">
-      <h2>Welcome, {user ? user.username : "Student"}!</h2>
-      <button onClick={onLogout}>Logout</button>
-
-      <h3>{editingId === null ? "Add Study Session" : "Edit Study Session"}</h3>
-      <form onSubmit={handleSubmit}>
-        <label>Subject</label>
-        <input
-          type="text"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          required
-        />
-
-        <label>Topic</label>
-        <input
-          type="text"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          required
-        />
-
-        <label>Duration (minutes)</label>
-        <input
-          type="number"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-          required
-        />
-
-        <label>Notes</label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        ></textarea>
-
-        <button type="submit">
-          {editingId === null ? "Add Session" : "Save Changes"}
+    <div className="page dashboard-page">
+      <div className="dashboard-header">
+        <h2>Welcome, {user ? user.username : "Student"}!</h2>
+        <button onClick={onLogout} className="btn btn-ghost">
+          Logout
         </button>
+      </div>
 
-        {editingId !== null && (
-          <button type="button" onClick={clearForm} className="link-button">
-            Cancel Edit
-          </button>
+      <div className="form-card">
+        <h3 className="form-card-title">
+          {editingId === null ? "Add Study Session" : "Edit Study Session"}
+        </h3>
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Subject</label>
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Topic</label>
+              <input
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Duration (minutes)</label>
+              <input
+                type="number"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Notes</label>
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              ></textarea>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="btn btn-primary">
+              {editingId === null ? "Add Session" : "Save Changes"}
+            </button>
+
+            {editingId !== null && (
+              <button type="button" onClick={clearForm} className="link-button">
+                Cancel Edit
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="sessions-section">
+        <h3 className="section-title">Your Study Sessions</h3>
+
+        {sessions.length === 0 ? (
+          <p className="empty-state">No study sessions yet. Add one above!</p>
+        ) : (
+          <ul className="sessions-grid">
+            {sessions.map((session) => (
+              <li key={session.id} className="session-card">
+                <div className="session-card-top">
+                  <strong className="session-subject">
+                    📚 {session.subject}
+                  </strong>
+                  <span className="session-duration">
+                    ⏱ {session.duration} min
+                  </span>
+                </div>
+
+                <p className="session-topic">{session.topic}</p>
+
+                {session.notes && (
+                  <p className="session-notes">Notes: {session.notes}</p>
+                )}
+
+                <div className="session-actions">
+                  <button
+                    className="btn btn-edit"
+                    onClick={() => startEditing(session)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-delete"
+                    onClick={() => handleDelete(session.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
-      </form>
-
-      <h3>Your Study Sessions</h3>
-
-      {sessions.length === 0 ? (
-        <p>No study sessions yet. Add one above!</p>
-      ) : (
-        <ul>
-          {sessions.map((session) => (
-            <li key={session.id}>
-              <strong>{session.subject}</strong> — {session.topic} (
-              {session.duration} min)
-              {session.notes && <p>Notes: {session.notes}</p>}
-
-              <div className="session-actions">
-                <button onClick={() => startEditing(session)}>Edit</button>
-                <button onClick={() => handleDelete(session.id)}>
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      </div>
     </div>
   );
 }
