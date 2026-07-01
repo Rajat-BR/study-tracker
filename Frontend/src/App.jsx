@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
-import { getSessions, addSession, updateSession, deleteSession } from "./api/api";
+import { getCurrentUser, getSessions, addSession, updateSession, deleteSession } from "./api/api";
 
 // -------------------------------------------------------------------
 // App.jsx is the ONLY place that holds global state:
@@ -19,6 +19,24 @@ function App() {
   const [currentPage, setCurrentPage] = useState("login");
   const [currentUser, setCurrentUser] = useState(null);
   const [sessions, setSessions] = useState([]);
+  
+  useEffect(()=>{
+    const getUser = async () => {
+      const token = localStorage.getItem("token");
+        if(!token) return;
+        try{
+          const user = await getCurrentUser();
+          await handleLoginSuccess(user);
+        }
+        catch (error) {
+          console.error(error);
+          localStorage.removeItem("token");
+          setCurrentUser(null);
+          setSessions([]);
+        }
+    };
+    getUser();  
+  },[]);
 
   // Called by LoginPage after a successful login
   const handleLoginSuccess = async (user) => {
@@ -34,6 +52,7 @@ function App() {
 
   // Called by DashboardPage when the user clicks "Logout"
   const handleLogout = () => {
+    localStorage.removeItem("token");
     setCurrentUser(null);
     setSessions([]);
     setCurrentPage("login");

@@ -59,6 +59,10 @@ export async function getCurrentUser() {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });
+  
+  if(!response.ok){
+    throw new Error("Invalid or expired Token !");
+  }
 
   const data = await response.json()
   return data;
