@@ -43,7 +43,7 @@ def get_session_by_id(id: int, current_user: UserOut = Depends(get_current_user)
     except InvalidSortFieldError:
         raise HTTPException(status_code=400, detail="Bad request")
     
-@router.post("/sessions")
+@router.post("/sessions", status_code=201)
 def create_session(session: SessionCreate, current_user: UserOut = Depends(get_current_user)):
     return new_session(session, current_user.id)
 
@@ -54,14 +54,14 @@ def update_session(id: int, update_data: SessionUpdate, current_user: UserOut = 
     except SessionNotFoundError:
         raise HTTPException(status_code=404, detail="Session Not found")
     
-@router.delete("/sessions/{id}")
+@router.delete("/sessions/{id}", status_code=204)
 def delete_session(id: int, current_user: UserOut = Depends(get_current_user)):
     try:
         return remove_session(id, current_user.id)
     except SessionNotFoundError:
         raise HTTPException(status_code=404, detail="Session Not Found")
     
-@router.post("/register", response_model=UserOut)
+@router.post("/register", response_model=UserOut, status_code=201)
 def register(user: UserRegister):
     try:
         return register_user(user)

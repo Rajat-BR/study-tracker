@@ -146,7 +146,6 @@ def remove_session(id: int, user_id):
             raise SessionNotFoundError()
         
         conn.commit()
-        return {"message": "Session removed Successfully"}
     finally:
         if conn:
             conn.close()
