@@ -19,6 +19,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState("login");
   const [currentUser, setCurrentUser] = useState(null);
   const [sessions, setSessions] = useState([]);
+  const [search, setSearch] = useState("");
   
   useEffect(()=>{
     const getUser = async () => {
@@ -56,6 +57,13 @@ function App() {
     setCurrentUser(null);
     setSessions([]);
     setCurrentPage("login");
+  };
+
+  //Univerasal function to fetch sessions
+  const loadSessions = async (search) => {
+    // FastAPI GET /sessions
+    const fetchedSessions = await getSessions(search);
+    setSessions(fetchedSessions);
   };
 
   // Called by DashboardPage's form when adding a new session

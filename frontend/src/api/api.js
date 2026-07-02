@@ -70,13 +70,23 @@ export async function getCurrentUser() {
 
 }
 
-// FastAPI Endpoint:
-// GET /sessions
-export async function getSessions() {
+// FastAPI Endpoint:       
+// GET /sessions 
+export async function getSessions(sessionData = {}) {
+  const params = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(sessionData)){
+    params.set(key, value);
+  }
+
+  let paramString = params.toString();
+  if (paramString!==""){
+    paramString = `?${paramString}`;
+  }
 
   const token = localStorage.getItem("token")
 
-  const response = await fetch(`${BASE_URL}/sessions`,{
+  const response = await fetch(`${BASE_URL}/sessions${paramString}`,{
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`
