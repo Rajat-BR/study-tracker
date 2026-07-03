@@ -378,6 +378,10 @@ textarea:focus {
   margin-top: 14px;
   text-align: center;
 }
+/* Search Box */
+#search-box{
+  margin-bottom: 10px;
+}
 
 /* -------------------------------------------------------------------
    9. SESSIONS LIST
@@ -516,3 +520,5 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
