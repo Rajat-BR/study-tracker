@@ -59,10 +59,9 @@ function App() {
     setCurrentPage("login");
   };
 
-  //Univerasal function to fetch sessions
-  const loadSessions = async (search) => {
+  const loadSessions = async () => {
     // FastAPI GET /sessions
-    const fetchedSessions = await getSessions(search);
+    const fetchedSessions = await getSessions({search});  //only search param for now, later can be expanded
     setSessions(fetchedSessions);
   };
 
@@ -116,6 +115,9 @@ function App() {
           onAddSession={handleAddSession}
           onUpdateSession={handleUpdateSession}
           onDeleteSession={handleDeleteSession}
+          search={search}
+          setSearch={setSearch}
+          onSearch={loadSessions}
         />
       )}
     </div>

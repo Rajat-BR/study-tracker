@@ -18,6 +18,9 @@ function DashboardPage({
   onAddSession,
   onUpdateSession,
   onDeleteSession,
+  search,
+  setSearch,
+  onSearch,
 }) {
   // Form field state
   const [subject, setSubject] = useState("");
@@ -146,6 +149,16 @@ function DashboardPage({
 
       <div className="sessions-section">
         <h3 className="section-title">Your Study Sessions</h3>
+        <input id = "search-box"
+          type="search"
+          placeholder="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if(e.key === "Enter"){
+              onSearch();
+            }
+          }}/>
 
         {sessions.length === 0 ? (
           <p className="empty-state">No study sessions yet. Add one above!</p>
