@@ -378,9 +378,26 @@ textarea:focus {
   margin-top: 14px;
   text-align: center;
 }
+
 /* Search Box */
 #search-box{
+  width: 250px;
+  font-size: 16px;
+  border: 2px #e2e8f0 solid;
+  background-color: white;
+  outline: none;
   margin-bottom: 10px;
+  transition: box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+#search-box:hover,
+#search-box:focus {
+    border-color: #4f46e5;
+    box-shadow:
+        0 0 6px rgba(79,70,229,.25),
+        0 0 15px rgba(79,70,229,.15),
+        0 0 30px rgba(79,70,229,.08);
 }
 
 /* -------------------------------------------------------------------

@@ -151,7 +151,7 @@ function DashboardPage({
         <h3 className="section-title">Your Study Sessions</h3>
         <input id = "search-box"
           type="search"
-          placeholder="search"
+          placeholder="Search Sessions.."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => {
