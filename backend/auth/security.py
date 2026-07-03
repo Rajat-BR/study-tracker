@@ -14,7 +14,7 @@ pwd_context = CryptContext(
 #JWT Configurations
 SECRET_KEY = "d7028625d8a2e26f2512a14bc40dd391fadab6214d86a15c171efae841958e4a"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 720
 
 
 def hash_password(password: str):
