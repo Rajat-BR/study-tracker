@@ -76,6 +76,9 @@ export async function getSessions(sessionData = {}) {
   const params = new URLSearchParams();
 
   for (const [key, value] of Object.entries(sessionData)){
+    if(value === "" || value === null || value === undefined){
+      continue;
+    }
     params.set(key, value);
   }
 
