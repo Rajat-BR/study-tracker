@@ -70,8 +70,6 @@ function App() {
   const loadSessions = async () => {
     // FastAPI GET /sessions
     const fetchedSessions = await getSessions({search, sort_by}); 
-    console.log("Current sort:", sort_by);
-    console.table(fetchedSessions);
     setSessions(fetchedSessions);
   };
 
