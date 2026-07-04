@@ -20,7 +20,10 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [search, setSearch] = useState("");
+  const [sort_by, setSort] = useState("id");
   
+  //-----------------useEffect Hooks---------------------------------
+  //automatically login if there is a valid token in the localStorage
   useEffect(()=>{
     const getUser = async () => {
       const token = localStorage.getItem("token");
@@ -38,6 +41,11 @@ function App() {
     };
     getUser();  
   },[]);
+
+  // Hook to look for changes in the states
+  useEffect(() => {
+    loadSessions();
+  },[sort_by]);
 
   // Called by LoginPage after a successful login
   const handleLoginSuccess = async (user) => {
@@ -61,7 +69,9 @@ function App() {
 
   const loadSessions = async () => {
     // FastAPI GET /sessions
-    const fetchedSessions = await getSessions({search});  //only search param for now, later can be expanded
+    const fetchedSessions = await getSessions({search, sort_by}); 
+    console.log("Current sort:", sort_by);
+    console.table(fetchedSessions);
     setSessions(fetchedSessions);
   };
 
@@ -118,6 +128,8 @@ function App() {
           search={search}
           setSearch={setSearch}
           onSearch={loadSessions}
+          sort={sort_by}
+          setSort={setSort}
         />
       )}
     </div>

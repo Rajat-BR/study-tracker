@@ -21,6 +21,8 @@ function DashboardPage({
   search,
   setSearch,
   onSearch,
+  sort,
+  setSort,
 }) {
   // Form field state
   const [subject, setSubject] = useState("");
@@ -159,6 +161,13 @@ function DashboardPage({
               onSearch();
             }
           }}/>
+        <select name="Sort by" id="sort-box" value={sort} onChange={(e) => {setSort(e.target.value)}}>
+          <option value="id">ID</option>
+          <option value="subject">Subject</option>
+          <option value="topic">Topic</option>
+          <option value="duration">Duration</option>
+          <option value="notes">Notes</option>
+        </select>
 
         {sessions.length === 0 ? (
           <p className="empty-state">No study sessions yet. Add one above!</p>
