@@ -154,14 +154,14 @@ function DashboardPage({
         <input id = "search-box"
           type="search"
           placeholder="Search Sessions.."
-          value={search}
+          value={search} // current search value : ""
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => {
             if(e.key === "Enter"){
               onSearch();
             }
           }}/>
-        <select name="Sort by" id="sort-box" value={sort} onChange={(e) => {setSort(e.target.value)}}>
+        <select name="Sort by" id="sort-box" value={sort} /*Current value to render for sort: "id" */ onChange={(e) => {setSort(e.target.value)}}>
           <option value="id">ID</option>
           <option value="subject">Subject</option>
           <option value="topic">Topic</option>
