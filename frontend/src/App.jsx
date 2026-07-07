@@ -47,6 +47,18 @@ function App() {
     loadSessions();
   },[sort_by]);
 
+  //Hook for debouncing search
+  const DEBOUNCE_DELAY = 400
+  
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      loadSessions();
+    },DEBOUNCE_DELAY);
+    return ()=>{
+      clearTimeout(timer);
+    };
+  },[search]);
+
   // Called by LoginPage after a successful login
   const handleLoginSuccess = async (user) => {
     setCurrentUser(user);
