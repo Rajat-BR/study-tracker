@@ -162,7 +162,7 @@ function DashboardPage({
             }
           }}/>
         <select name="Sort by" id="sort-box" value={sort} /*Current value to render for sort: "id" */ onChange={(e) => {setSort(e.target.value)}}>
-          <option value="id">ID</option>
+          <option value="id">Default</option>
           <option value="subject">Subject</option>
           <option value="topic">Topic</option>
           <option value="duration">Duration</option>
