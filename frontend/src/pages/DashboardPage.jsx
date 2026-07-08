@@ -20,7 +20,6 @@ function DashboardPage({
   onDeleteSession,
   search,
   setSearch,
-  onSearch,
   sort,
   setSort,
 }) {
@@ -156,11 +155,7 @@ function DashboardPage({
           placeholder="Search Sessions.."
           value={search} // current search value : ""
           onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => {
-            if(e.key === "Enter"){
-              onSearch();
-            }
-          }}/>
+        />
         <select name="Sort by" id="sort-box" value={sort} /*Current value to render for sort: "id" */ onChange={(e) => {setSort(e.target.value)}}>
           <option value="id">Default</option>
           <option value="subject">Subject</option>
