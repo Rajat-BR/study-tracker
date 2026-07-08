@@ -116,7 +116,7 @@ def change_session(id: int, update_data: SessionUpdate, user_id):
         cursor = conn.cursor()
         update_dict = update_data.model_dump(exclude_unset=True)
         if not update_dict:
-            return {"message": "Nothing to update"}
+            raise ValueError("No fields provided for update !")
         fields=[]
         values=[]
         for key, value in update_dict.items():

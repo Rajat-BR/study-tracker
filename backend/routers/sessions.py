@@ -53,6 +53,8 @@ def update_session(id: int, update_data: SessionUpdate, current_user: UserOut = 
         return change_session(id, update_data, current_user.id)
     except SessionNotFoundError:
         raise HTTPException(status_code=404, detail="Session Not found")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="No fields provided")
     
 @router.delete("/sessions/{id}", status_code=204)
 def delete_session(id: int, current_user: UserOut = Depends(get_current_user)):
