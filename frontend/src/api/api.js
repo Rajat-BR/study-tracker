@@ -155,6 +155,4 @@ export async function deleteSession(id) {
     alert("Session Not Found !");
   }
 
-  const data = await response.json();
-  return data;
 }
