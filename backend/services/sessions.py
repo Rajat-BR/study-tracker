@@ -137,7 +137,11 @@ def change_session(id: int, update_data: SessionUpdate, user_id):
             raise SessionNotFoundError()
         
         conn.commit()
-        return {"message": "Session updated successfully"} 
+        
+        cursor.execute("SELECT * FROM sessions WHERE id = ? AND user_id = ?", (id, user_id))
+        row = cursor.fetchone()
+        return dict(row)
+
     finally:
         if conn:
             conn.close()
