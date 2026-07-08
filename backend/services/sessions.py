@@ -1,6 +1,6 @@
 from fastapi import Depends
 from database.connection import get_connection
-from schemas.sessions import SessionCreate, SessionUpdate, UserLogin, UserRegister, UserOut, Token
+from schemas.sessions import SessionCreate, SessionUpdate, SessionOut, UserRegister, UserOut, Token
 from exceptions.custom_exceptions import SessionNotFoundError, InvalidSortFieldError, UserAlreadyExistsError, InvalidCredentialsError, EmailAlreadyExistsError
 from auth.security import hash_password, verify_password, create_access_token, oauth2_scheme, decode_access_token
 
@@ -95,7 +95,15 @@ def new_session(session: SessionCreate, user_id):
             (session.subject, session.topic, session.duration, session.notes, user_id))
         conn.commit()
 
-        return {"message": f"session added successfully, last row : {cursor.lastrowid}"}
+        session_id = cursor.lastrowid
+
+        return SessionOut(
+            id=session_id,
+            subject=session.subject,
+            topic=session.topic,
+            duration=session.duration,
+            notes=session.notes
+        ) 
     
     finally:
         if conn:
