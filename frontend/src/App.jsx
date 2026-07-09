@@ -44,13 +44,15 @@ function App() {
 
   // Hook to look for changes in the states
   useEffect(() => {
+    if(!currentUser) return;
     loadSessions();
   },[sort_by]);
 
   //Hook for debouncing search
   const DEBOUNCE_DELAY = 400
-  
+
   useEffect(()=>{
+    if(!currentUser) return;
     const timer = setTimeout(()=>{
       loadSessions();
     },DEBOUNCE_DELAY);
