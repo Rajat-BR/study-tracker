@@ -9,22 +9,32 @@ function LoginPage({ onLoginSuccess, goToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoggingIn, setLoggingIn] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoggingIn(true);
 
     // FastAPI Endpoint:
     // POST /login
-    // (loginUser() lives in src/api/api.js - it's mocked for now)
-    const result = await loginUser(email, password);
+    try{
+      const result = await loginUser(email, password);
 
-    if (result.access_token) {
-      const user = await getCurrentUser();
-      onLoginSuccess(user);
-    } else {
-      setError("Login failed. Please check your credentials.");
+      if (result.access_token) {
+        const user = await getCurrentUser();
+        onLoginSuccess(user);
+      } 
+      else {
+          setError("Login failed. Please check your credentials.");
+      }
     }
+    catch (error){
+      alert("Something went wrong ! Please try again later.");
+    }
+    finally{
+      setLoggingIn(false);
+    } 
   };
 
   return (
@@ -51,8 +61,8 @@ function LoginPage({ onLoginSuccess, goToRegister }) {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary btn-block">
-          Login
+        <button disabled={isLoggingIn} type="submit" className="btn btn-primary btn-block">
+          {isLoggingIn === true ? "Logging in ...." : "Login"}
         </button>
       </form>
 
