@@ -111,6 +111,8 @@ function App() {
   const handleDeleteSession = async (id) => {
     // FastAPI Endpoint:
     // DELETE /sessions/{id}
+    const result = confirm("Are you sure ?");
+    if (!result) return;
     await deleteSession(id);
     setSessions(sessions.filter((session) => session.id !== id));
   };
